@@ -9,6 +9,7 @@
 
 body {
   background-color: #fff;
+  margin: 0;
 }
 
 @media screen and (max-width: 730px) {
@@ -16,3 +17,21 @@ body {
     display: none;
   }
 }
+body {
+  background-color: rgb(134, 181, 189);
+  margin: 0 auto;
+}
+
+nsp-snake {
+  height: 100vh;
+  width: 100vw;
+  display: block;
+}
+.game-container[_ngcontent-c0] {   
+  border-radius: 0;
+  position: relative;
+  top: 50%;
+  -moz-transform: translateY(-50%);
+-webkit-transform: translateY(-50%);
+transform: translateY(-50%);
+} 

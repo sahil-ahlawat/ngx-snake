@@ -3,7 +3,7 @@ import { BestScoreManager } from './app.storage.service';
 import { CONTROLS, COLORS, BOARD_SIZE, GAME_MODES } from './app.constants';
 
 @Component({
-  selector: 'ngx-snake',
+  selector: 'nsp-snake',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   host: {
@@ -24,6 +24,8 @@ export class AppComponent {
   public showMenuChecker = false;
   public gameStarted = false;
   public newBestScore = false;
+  public pauseGame = false;
+  public resumeGame = true;
   public best_score = this.bestScoreService.retrieve();
 
   private snake = {
@@ -46,7 +48,27 @@ export class AppComponent {
   ) {
     this.setBoard();
   }
-
+  private fakeEvent;
+  onSwipeLeft(e){
+    if (this.snake.direction !== CONTROLS.RIGHT) {
+      this.tempDirection = CONTROLS.LEFT;
+    }
+  }
+  onSwipeRight(e){
+    if (this.snake.direction !== CONTROLS.LEFT) {
+      this.tempDirection = CONTROLS.RIGHT;
+    }
+  }
+  onSwipeUp(e){
+    if (this.snake.direction !== CONTROLS.DOWN) {
+      this.tempDirection = CONTROLS.UP;
+    }
+  }
+  onSwipeDown(e){
+    if (this.snake.direction !== CONTROLS.UP) {
+      this.tempDirection = CONTROLS.DOWN;
+    }
+  }
   handleKeyboardEvents(e: KeyboardEvent) {
     if (e.keyCode === CONTROLS.LEFT && this.snake.direction !== CONTROLS.RIGHT) {
       this.tempDirection = CONTROLS.LEFT;
@@ -74,7 +96,16 @@ export class AppComponent {
 
     return COLORS.BOARD;
   };
-
+  pauseGamef():void{
+    this.pauseGame = true;
+    this.resumeGame = false;
+    this.updatePositions();
+  }
+  resumeGamef():void {
+    this.pauseGame = false;
+    this.resumeGame = true;
+    this.updatePositions();
+  }
   updatePositions(): void {
     let newHead = this.repositionHead();
     let me = this;
@@ -103,10 +134,12 @@ export class AppComponent {
     this.board[newHead.y][newHead.x] = true;
 
     this.snake.direction = this.tempDirection;
-
-    setTimeout(() => {
-      me.updatePositions();
-    }, this.interval);
+    if(!this.pauseGame){
+      setTimeout(() => {
+        me.updatePositions();
+      }, this.interval);
+    }
+    
   }
 
   repositionHead(): any {
